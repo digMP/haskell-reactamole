@@ -28,6 +28,10 @@ module Bio.Reactamole.Examples
   , entangle
   , rectify
   , unanimous
+  , inputSig
+  , modulatedSig
+  , demodulatedSig
+  , withLowPassSig
   ) where
 
 import Bio.Reactamole
@@ -100,3 +104,25 @@ unanimous x y z = if x then y && z else not (y || z)
 -- Demonstrates the use of arr3Bl.
 unanimousCRN :: CRN (Bool, Bool, Bool) Bool
 unanimousCRN = arr3Bl unanimous
+
+--------------------------------------------------------------------------------
+
+exp1, exp2, exp3 :: CRN () Double
+exp1 = constRl 0.5  &&& carrier 0.001  >>> multCRN
+exp2 = constRl 0.25 &&& carrier 0.002  >>> multCRN
+exp3 = constRl 0.3  &&& carrier 0.0014 >>> multCRN
+
+inputSig :: CRN () Double
+inputSig = constRl 1.1 &&& exp1 >>> addCRN
+                       &&& exp2 >>> addCRN
+                       &&& exp3 >>> addCRN
+                &&& constRl 0.5 >>> multCRN
+
+modulatedSig :: CRN () Double
+modulatedSig = inputSig >>> modulate 0.75
+
+demodulatedSig :: CRN () Double
+demodulatedSig = modulatedSig >>> demodulate 0.75 0.25
+
+withLowPassSig :: CRN () Double
+withLowPassSig = demodulatedSig >>> lowPass 0.13 0.025
