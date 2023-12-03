@@ -1,7 +1,5 @@
 # Reactamole: A Functional Reactive Molecular Programming DSL
 
-![CI Workflow Badge](https://github.com/digMP/haskell-reactamole/actions/workflows/main.yml/badge.svg)
-
 Reactamole is a domain-specific language for molecular programming that
 utilizes reactive functional programming principles. Reactamole observes a
 direct correspondence between signal functions in a reactive functional program
